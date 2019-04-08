@@ -14,8 +14,9 @@ RSpec.describe OysterCard do
     end
 
     it ' should raise an error when max top up limit is reached' do
-      90.times{ card.top_up(1) }
-      expect { card.top_up(1) }.to raise_error 'The maximum top of £90 has been reached'
+      max_top_up = OysterCard::MAX_TOP_UP
+      card.top_up(max_top_up)
+      expect { card.top_up(1) }.to raise_error 'The maximum you can top up is £90 please'
     end
   end
 end
