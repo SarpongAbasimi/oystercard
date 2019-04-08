@@ -10,14 +10,15 @@ class OysterCard
   end
 
   def top_up(amount)
-    fail "The maximum top of £#{ MAX_TOP_UP } has been reached" if max_reached?
+    fail "The maximum you can top up is £#{ MAX_TOP_UP } please" if max_reached?(amount)
     @balance += amount
   end
 
   private
 
-  def max_reached?
-    @balance >= MAX_TOP_UP
+  def max_reached?(amount)
+    user_top_up = @balance + amount
+    user_top_up > MAX_TOP_UP
   end
 
 end
