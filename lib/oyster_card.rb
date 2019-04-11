@@ -37,7 +37,7 @@ class OysterCard
   end
 
   def in_journey?
-    entry_station ? true :false
+    !!entry_station
   end
 
   private
