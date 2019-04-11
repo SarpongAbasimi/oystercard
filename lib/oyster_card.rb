@@ -6,11 +6,12 @@ class OysterCard
   MINIMUM_FARE = 2
 
 
-  attr_reader :balance
+  attr_reader :balance, :entry_station, :journey_history
 
   def initialize
     @balance = DEFAULT_BALANCE
     @journey_tracker = false
+    @journey_history = []
   end
 
   def top_up(amount)
@@ -19,18 +20,24 @@ class OysterCard
     @balance += amount
   end
 
-  def touch_in
-    raise "£#{MINIMUM_BALANCE} is the minimum amount for single journey" unless @balance >= MINIMUM_BALANCE 
+  def touch_in(station)
+    raise "£#{MINIMUM_BALANCE} is the minimum amount for single journey" unless @balance >= MINIMUM_BALANCE
+    @entry_station = station
+    @journey = {}
+    @journey['entry_station'] = station
     @journey_tracker = true
   end
 
-  def touch_out
+  def touch_out(station)
     deduct(MINIMUM_FARE)
+    @entry_station = nil
+    @journey['exit_station'] = station
+    @journey_history.push(@journey)
     @journey_tracker = false
   end
 
   def in_journey?
-    @journey_tracker
+    entry_station ? true :false
   end
 
   private
