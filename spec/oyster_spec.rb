@@ -2,6 +2,9 @@ require 'oyster_card'
 
 RSpec.describe OysterCard do
   let(:card) { described_class.new }
+  #let(:topped_up_card) {described_class.new} # How do you top up from here
+  let(:station) {double :Station }
+  let(:exit_station) {double :ExitStation }
 
   describe 'Described class' do
     it 'When initialized should have a balance of 0' do
@@ -37,23 +40,39 @@ RSpec.describe OysterCard do
     context '#touch_in' do
       it 'is expected to change in journey to true' do
         card.top_up(10)
-        card.touch_in
+        card.touch_in(station)
         expect(card).to be_in_journey
       end
+      
       it 'should raise error if card has less than £1' do
-        expect { card.touch_in }.to raise_error '£1 is the minimum amount for single journey'
+        expect { card.touch_in(station) }.to raise_error '£1 is the minimum amount for single journey'
+      end
+      it 'stores the entry station' do
+        card.top_up(10)
+        card.touch_in(station)
+        expect(card.entry_station).to eq(station)
       end
     end
 
    context '#touch_out' do
      it 'is expected to change in journey to false' do
-       card.touch_out 
+       card.top_up(10)
+       card.touch_in(station)
+       card.touch_out(exit_station) 
        expect(card).not_to be_in_journey
      end
      it ' deducts fare from balance' do
+       card.top_up(10)
+       card.touch_in(station)
        fare = OysterCard::MINIMUM_FARE
-       expect {card.touch_out}.to change {card.balance}.by(-fare)
+       expect { card.touch_out(exit_station) }.to change { card.balance }.by(-fare)
      end
    end
+
+  end
+  describe '#journeyHistory' do
+    it 'stores the entry and exit stations' do
+       
+    end
   end
 end
