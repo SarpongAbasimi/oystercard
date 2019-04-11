@@ -2,7 +2,6 @@ require 'oyster_card'
 
 RSpec.describe OysterCard do
   let(:card) { described_class.new }
-  #let(:topped_up_card) {described_class.new} # How do you top up from here
   let(:station) {double :Station }
   let(:exit_station) {double :ExitStation }
 
@@ -23,6 +22,7 @@ RSpec.describe OysterCard do
       expect { card.top_up(1) }.to raise_error 'The maximum top up is £90'
     end
   end
+
 =begin
   describe '#deducts' do
     it 'decducts and amount from balance' do
@@ -30,9 +30,16 @@ RSpec.describe OysterCard do
     end
   end
 =end
+
   describe '#in_journey?' do
     it 'should return false' do
       expect(card).not_to be_in_journey
+    end
+
+    it ' should return true if in journey' do
+      card.top_up(10)
+      card.touch_in(station)
+      expect(card.in_journey?).to eq(true)
     end
   end
 
@@ -71,8 +78,12 @@ RSpec.describe OysterCard do
 
   end
   describe '#journeyHistory' do
+    let(:journey) { { 'entry_station' => station, 'exit_station' => exit_station } }
     it 'stores the entry and exit stations' do
-       
+      card.top_up(10)
+      card.touch_in(station)
+      card.touch_out(exit_station)
+      expect(card.journey_history).to include(journey)
     end
   end
 end
