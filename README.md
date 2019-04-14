@@ -1,5 +1,5 @@
 # Context
-> Oystercard Challenge
+> Oystercard Challenge.
 
 After completing Week one challenge **[Boris Bikes](https://github.com/SarpongAbasimi/boris-bike)** at Makers, we were given the Oystercard Challenge to give us the chance to reinforce 
 what you learned last week. 
